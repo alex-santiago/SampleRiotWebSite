@@ -1,0 +1,390 @@
+<clients-detail>
+  <div class="page-header">
+     <h3><i class="fa fa-user"></i> { language.client.title.clientsDetail }: {client.name}</h3>
+  </div>
+  <div class="page-toolbar">
+    <div class="col-auto">
+      <button type="button" class="btn btn-primary" onclick={onClickBack}><i class="fa fa-arrow-left"></i> { language.globals.back }</button>
+    </div>
+    <div class="col-10">
+      <div class="form-group-toolbar">
+        <button type="button" class="btn btn-primary" onclick={onClickNew}><i class="fa fa-file"></i> { language.globals.new }</button>
+        <button type="button" class="btn btn-primary" onclick={onClickSave}><i class="fa fa-save"></i> { language.globals.save }</button>
+        <button type="button" class="btn btn-primary" onclick={onClickUserAccounts} if={AccountsVisible}><i class="fa fa-users"></i> { language.client.action.userAccounts }</button>
+      </div>
+    </div>
+  </div>
+
+  <form action="" id="form-content" role="form" class="custom-validation">
+    <div class="row">
+      <div class="col-sm-3 col-md-3 col-lg-3">
+        <div class="form-group">
+          <label>{ language.client.attributes.id }:</label>
+          <input class="form-control" readonly type="text" id="inputclientid" name="inputclientid" ref="inputclientid" value={ (client.id ? client.id : "") }>
+        </div>
+      </div>
+      <div class="col-sm-9 col-md-9 col-lg-9">
+        <div class="form-group">
+          <label>{ language.client.attributes.name }:</label>
+          <input class="form-control" type="text" required id="inputclientname" name="inputclientname" ref="inputclientname" value={ (client.name ? client.name : "") } placeholder={ language.client.placeholders.name }>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-6 col-lg-6">
+        <div class="form-group">
+          <label>{ language.client.attributes.tradeName }:</label>
+          <input class="form-control" type="text" required id="inputclienttradename" name="inputclienttradename" ref="inputclienttradename" value={ (client.tradeName ? client.tradeName : "") } placeholder={ language.client.placeholders.tradeName }>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-6 col-lg-6">
+        <div class="form-group">
+          <label>{ language.client.attributes.registerNumber }:</label>
+          <input class="form-control" type="text" required id="inputclientregisternumber" name="inputclientregisternumber" ref="inputclientregisternumber" value={ (client.registerNumber ? client.registerNumber : "") } placeholder={ language.client.placeholders.registerNumber }>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-6 col-lg-6">
+        <div class="form-group">
+          <label>{ language.client.attributes.phone }:</label>
+          <input class="form-control" type="text" required id="inputclientphone" name="inputclientphone" ref="inputclientphone" value={ (client.phone ? client.phone : "") } placeholder={ language.client.placeholders.phone }>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-6 col-lg-6">
+        <div class="form-group">
+          <label>{ language.client.attributes.email }:</label>
+          <input class="form-control" type="email" required id="inputclientemail" name="inputclientemail" ref="inputclientemail" value={ (client.email ? client.email : "") } placeholder={ language.client.placeholders.email }>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-6 col-lg-6">
+        <div class="form-group">
+          <label>{ language.client.attributes.site }:</label>
+          <input class="form-control" type="text" required id="inputclientsite" name="inputclientsite" ref="inputclientsite" value={ (client.site ? client.site : "") } placeholder={ language.client.placeholders.site }>
+        </div>
+      </div>
+      <div class="col-sm-4 col-md-3 col-lg-3">
+        <div class="form-group">
+          <label>{ language.client.attributes.isBlocked }:</label>
+          <input class="form-control" readonly type="text" id="inputIsBlocked" name="inputIsBlocked" ref="inputIsBlocked" value={ (client.isBlocked ? client.isBlocked : false) }>
+        </div>
+      </div>
+      <div class="col-sm-4 col-md-3 col-lg-3" if={blocked}>
+        <div class="form-group">
+          <button type="button" class="btn btn-outline-danger" onclick={onClickUnblock}><i class="fa fa-ban"></i> { language.globals.unblock }</button>
+        </div>
+      </div>
+      <div class="col-sm-12 col-md-12 col-lg-12">
+        <div class="card mb-3">
+          <div class="card-header"><i class="fa fa-database"></i> { language.client.subtitle.clientSystems }:</div>
+          <div class="card-body">
+            <div class="row mb-3" if={!newSystem}>
+              <div class="col-12">
+                <div class="form-group">
+                  <label>{ language.client.messages.clientNewSystem }</label>
+                </div>
+              </div>
+            </div>
+            <div class="row mb-3" if={newSystem}>
+              <div class="col-12">
+                <div class="form-group-toolbar">
+                  <button type="button" class="btn btn-primary" onclick={onClickNewSystem}><i class="fa fa-file"></i> { language.client.action.newSystem }</button>
+                </div>
+              </div>
+            </div>
+            <div class="table-responsive" if={drawGrid}>
+              <table class="dataTable table table-bordered table-striped" id="systems-table" width="100%" cellspacing="0">
+                <thead>
+                  <tr>
+                    <th>{ language.client.attributes.id }</th>
+                    <th>{ language.client.attributes.name }</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr each={system in sessionObj.systems.systemlist} onclick={()=>onSelectItem(system)}>
+                    <td>{ system.id }</td>
+                    <td>{ system.name }</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-12 col-md-12 col-lg-12" if={false}>
+        <div class="card mb-3">
+          <div class="card-header"><i class="fa fa-cogs"></i> { language.client.subtitle.workOrderReportSettings }:</div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-sm-4 col-md-6 col-lg-6">
+                <div class="form-group">
+                  <label>Url do logo:</label>
+                  <input type="text" required id="inputWorkOrderSettingsLogoUrl" name="inputWorkOrderSettingsLogoUrl" ref="inputWorkOrderSettingsLogoUrl" value={ (client.settings ? ( client.settings.workOrderReportSettings ? ( client.settings.workOrderReportSettings.logoUrl ? client.settings.workOrderReportSettings.logoUrl : "" )  : "" ) : "") } class="form-control" placeholder={ language.client.placeholders.logoUrl }>
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-12 col-lg-12">
+                <div class="form-group">
+                  <label>{ language.client.attributes.margins }:</label>
+                  <div class="row">
+                    <div class="col-sm-3 col-md-3 col-lg-3">
+                      <label>{ language.client.attributes.marginTop }:</label>
+                      <input type="text" required id="inputWorkOrderSettingsMarginsTop" name="inputWorkOrderSettingsMarginsTop" ref="inputWorkOrderSettingsMarginsTop"
+                        value={ (client.settings ? ( client.settings.workOrderReportSettings ? ( client.settings.workOrderReportSettings.margins ? ( client.settings.workOrderReportSettings.margins.top ? client.settings.workOrderReportSettings.margins.top : "0" ) : "0" )  : "0" ) : "0") }
+                        class="form-control" placeholder={ language.client.placeholders.marginTop }>
+                    </div>
+                    <div class="col-sm-3 col-md-3 col-lg-3">
+                      <label>{ language.client.attributes.marginBottom }:</label>
+                      <input type="text" required id="inputWorkOrderSettingsMarginsBottom" name="inputWorkOrderSettingsMarginsBottom" ref="inputWorkOrderSettingsMarginsBottom"
+                        value={ (client.settings ? ( client.settings.workOrderReportSettings ? ( client.settings.workOrderReportSettings.margins ? ( client.settings.workOrderReportSettings.margins.bottom ? client.settings.workOrderReportSettings.margins.bottom : "0" ) : "0" )  : "0" ) : "0") }
+                        class="form-control" placeholder={ language.client.placeholders.marginBottom }>
+                    </div>
+                    <div class="col-sm-3 col-md-3 col-lg-3">
+                      <label>{ language.client.attributes.marginLeft }:</label>
+                      <input type="text" required id="inputWorkOrderSettingsMarginsLeft" name="inputWorkOrderSettingsMarginsLeft" ref="inputWorkOrderSettingsMarginsLeft"
+                        value={ (client.settings ? ( client.settings.workOrderReportSettings ? ( client.settings.workOrderReportSettings.margins ? ( client.settings.workOrderReportSettings.margins.left ? client.settings.workOrderReportSettings.margins.left : "0" ) : "0" )  : "0" ) : "0") }
+                        class="form-control" placeholder={ language.client.placeholders.marginLeft }>
+                    </div>
+                    <div class="col-sm-3 col-md-3 col-lg-3">
+                      <label>{ language.client.attributes.marginRigth }:</label>
+                      <input type="text" required id="inputWorkOrderSettingsMarginsRight" name="inputWorkOrderSettingsMarginsRight" ref="inputWorkOrderSettingsMarginsRight"
+                        value={ (client.settings ? ( client.settings.workOrderReportSettings ? ( client.settings.workOrderReportSettings.margins ? ( client.settings.workOrderReportSettings.margins.right ? client.settings.workOrderReportSettings.margins.right : "0" ) : "0" )  : "0" ) : "0") }
+                        class="form-control" placeholder={ language.client.placeholders.marginRigth }>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4 col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label>Page Type:</label>
+                  <input type="text" required id="inputWorkOrderSettingsPageType" name="inputWorkOrderSettingsPageType" ref="inputWorkOrderSettingsPageType" value={ (client.settings ? ( client.settings.workOrderReportSettings ? ( client.settings.workOrderReportSettings.pageType ? client.settings.workOrderReportSettings.pageType : "" )  : "" ) : "") } class="form-control" placeholder={ language.client.placeholders.pageType }>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-12 col-md-12 col-lg-12">
+        <div class="card mb-3">
+          <div class="card-header"><i class="fa fa-address-book"></i> { language.client.subtitle.address }:</div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-sm-4 col-md-6 col-lg-6">
+                <div class="form-group">
+                  <label>{ language.client.attributes.address }:</label>
+                  <input type="text" required id="inputAddressStreetAddress" name="inputAddressStreetAddress" ref="inputAddressStreetAddress" value={ (client.address ? ( client.address.streetAddress ? client.address.streetAddress : "" ) : "") } class="form-control" placeholder={ language.client.placeholders.address }>
+                </div>
+              </div>
+              <div class="col-sm-4 col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label>{ language.client.attributes.city }:</label>
+                  <input type="text" required id="inputAddressCity" name="inputAddressCity" ref="inputAddressCity" value={ (client.address ? ( client.address.city ? client.address.city : "" ) : "") } class="form-control" placeholder={ language.client.placeholders.city }>
+                </div>
+              </div>
+              <div class="col-sm-4 col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label>{ language.client.attributes.state }:</label>
+                  <input type="text" required id="inputAddressState" name="inputAddressState" ref="inputAddressState" value={ (client.address ? ( client.address.state ? client.address.state : "" ) : "") } class="form-control" placeholder={ language.client.placeholders.state }>
+                </div>
+              </div>
+              <div class="col-sm-4 col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label>{ language.client.attributes.zip }:</label>
+                  <input type="text" required id="inputAddressZip" name="inputAddressZip" ref="inputAddressZip" value={ (client.address ? ( client.address.zip ? client.address.zip : "" ) : "") } class="form-control" placeholder={ language.client.placeholders.zip }>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <!-- component javascript code -->
+  <script>
+    const tag = this;
+    loadSession();
+    tag.client = sessionObj.clients.selectedClient;
+    tag.AccountsVisible = (!tag.client.new == true);
+    tag.newSystem = (!tag.client.new == true);
+    tag.blocked = tag.client.isBlocked;
+
+    this.on('mount', function() {
+      nativeFormValidationOff();
+
+      if (IS_A_TEST) {
+        loadTestClientSystems();
+      }
+      else {
+        if (tag.client.id != null && tag.client.id != '0' && tag.client.id != '') {
+          system.controllers.systems.listClientSystems(tag.client.id, function(systems) {
+            sessionObj.systems.systemlist = systems;
+            saveSession();
+
+            if (sessionObj.systems.systemlist != null && sessionObj.systems.systemlist.length > 0) {
+              tag.drawGrid = true;
+            }
+            else {
+              tag.drawGrid = false;
+            }
+            tag.newSystem = true;
+            tag.update();
+            createDataTable('#systems-table');
+          });
+        }
+        else {
+          sessionObj.systems.systemlist = newSystem();
+          saveSession();
+          tag.drawGrid = false;
+          tag.newSystem = false;
+          tag.update();
+          createDataTable('#systems-table');
+        }
+      }
+    });
+
+    this.on('before-mount', function() {
+    });
+
+    onClickBack () {
+      sessionObj.clients.selectedClient = null;
+      sessionObj.systems.systemlist = new Object();
+      saveSession();
+      path.navigate("/clients-manage", path.parentDescription, language.client.title.clients);
+    }
+
+    onClickNew () {
+      // initialize a new empty client and a new empty system in the sessionObj
+      sessionObj.clients.selectedClient = newClient();
+      sessionObj.systems.systemlist = newSystem();
+      saveSession();
+      tag.refs.inputclientid.value = '';
+      tag.refs.inputclientname.value = '';
+      tag.refs.inputclienttradename.value = '';
+      tag.refs.inputclientregisternumber.value = '';
+      tag.refs.inputclientsite.value = '';
+      tag.refs.inputclientphone.value = '';
+      tag.refs.inputclientemail.value = '';
+
+      tag.refs.inputAddressStreetAddress.value = '';
+      tag.refs.inputAddressCity.value = '';
+      tag.refs.inputAddressState.value = '';
+      tag.refs.inputAddressZip.value = '';
+
+      // tag.refs.inputWorkOrderSettingsLogoUrl.value = '';
+      // tag.refs.inputWorkOrderSettingsMarginsTop.value = '0';
+      // tag.refs.inputWorkOrderSettingsMarginsBottom.value = '0';
+      // tag.refs.inputWorkOrderSettingsMarginsLeft.value = '0';
+      // tag.refs.inputWorkOrderSettingsMarginsRight.value = '0';
+      // tag.refs.inputWorkOrderSettingsPageType.value = '0';
+      tag.drawGrid = false;
+      tag.newSystem = false;
+      tag.AccountsVisible = false;
+    }
+
+    onClickUserAccounts() {
+      path.navigate('/accounts-manage', path.parentDescription, language.client.title.clientsAccountManage);
+    }
+
+    onClickSave () {
+      if (formValidationPassed()) {
+        let client = new Object();
+        client.name = tag.refs.inputclientname.value;
+        client.tradeName = tag.refs.inputclienttradename.value;
+        client.registerNumber = tag.refs.inputclientregisternumber.value;
+        client.site = tag.refs.inputclientsite.value;
+        client.phone = tag.refs.inputclientphone.value;
+        client.email = tag.refs.inputclientemail.value;
+
+        client.address = new Object();
+        client.address.streetAddress = tag.refs.inputAddressStreetAddress.value;
+        client.address.city = tag.refs.inputAddressCity.value;
+        client.address.state = tag.refs.inputAddressState.value;
+        client.address.zip = tag.refs.inputAddressZip.value;
+
+        client.settings = new Object();
+        client.settings.workOrderReportSettings = new Object();
+        client.settings.workOrderReportSettings.logoUrl = '';
+        client.settings.workOrderReportSettings.pageType = 0;
+        client.settings.workOrderReportSettings.margins = new Object();
+        client.settings.workOrderReportSettings.margins.top = 0;
+        client.settings.workOrderReportSettings.margins.bottom = 0;
+        client.settings.workOrderReportSettings.margins.left = 0;
+        client.settings.workOrderReportSettings.margins.right = 0;
+
+        if (tag.refs.inputclientid.value != '') {
+          let clientid = new Object();
+          clientid.id = tag.refs.inputclientid.value;
+          client.id = tag.refs.inputclientid.value;
+          system.controllers.clients.updateClient(clientid, client, function() {
+            displayMessageSuccess(language.client.messages.clientAlteredSuccess);
+          });
+          sessionObj.clients.selectedClient = client;
+          saveSession();
+          tag.client = client;
+        }
+        else {
+          system.controllers.clients.saveClient(client, function(id) {
+            tag.refs.inputclientid.value = id;
+            displayMessageSuccess(language.client.messages.clientInsertedSuccess);
+          });
+          tag.blocked = tag.client.isBlocked;
+          tag.newSystem = true;
+          client.id = tag.refs.inputclientid.value;
+          sessionObj.systems.systemlist = new Object();
+          sessionObj.clients.selectedClient = client;
+          saveSession();
+          tag.client = client;
+        }
+      }
+    }
+
+    onSelectItem(system) {
+      sessionObj.systems.selectedSystem = system;
+      saveSession();
+      path.navigate('/clients-system', path.parentDescription, language.client.title.clientsSystem);
+    }
+
+    onClickNewSystem() {
+      sessionObj.systems.selectedSystem = newSystem();
+      saveSession();
+      path.navigate('/clients-system', path.parentDescription, language.client.title.clientsSystem);
+    }
+
+    onClickUnblock () {
+      let clientid = new Object();
+      clientid.id = tag.refs.inputclientid.value;
+      system.controllers.clients.unblockClient(clientid, {}, function() {
+        tag.blocked = false;
+        displayMessageSuccess(language.client.messages.clientsUnblocked);
+      });
+    }
+
+    const loadTestClientSystems = () => {
+      if (tag.client.id != null && tag.client.id != '0' && tag.client.id != '') {
+        systems = getTestSystems(tag.client.id);
+        sessionObj.systems.systemlist = systems;
+        saveSession();
+        if (sessionObj.systems.systemlist != null && sessionObj.systems.systemlist.length > 0) {
+          tag.drawGrid = true;
+        }
+        else {
+          tag.drawGrid = false;
+        }
+        tag.newSystem = true;
+        tag.update();
+        createDataTable('#systems-table');
+      }
+      else {
+        sessionObj.systems.systemlist = newSystem();
+        saveSession();
+        tag.drawGrid = false;
+        tag.newSystem = false;
+        tag.update();
+        createDataTable('#systems-table');
+      }
+    };
+
+  </script>
+</clients-detail>

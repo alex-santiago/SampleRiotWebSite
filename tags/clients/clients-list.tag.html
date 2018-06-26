@@ -1,0 +1,71 @@
+<clients-list>
+  <div class="table-responsive" if={drawGrid}>
+    <table class="dataTable table table-bordered table-striped" id="client-table" width="100%" cellspacing="0">
+      <thead>
+        <tr>
+          <th>{ language.client.attributes.id }</th>
+          <th>{ language.client.attributes.name }</th>
+          <th>{ language.client.attributes.tradeName }</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr each={client in sessionObj.clients.clientlist} onclick={()=>onSelectItem(client)}>
+          <td>{ client.id }</td>
+          <td>{ client.name }</td>
+          <td>{ client.tradeName }</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- component javascript code -->
+  <script>
+
+    const tag = this;
+    tag.drawGrid = false;
+
+    this.on('mount', function() {
+      if (IS_A_TEST) {
+        loadTestClients();
+      }
+      else {
+        system.controllers.clients.listClients(function(clients) {
+          sessionObj.clients.clientlist = clients;
+          saveSession();
+
+          if (sessionObj.clients.clientlist != null && sessionObj.clients.clientlist.length > 0) {
+            tag.drawGrid = true;
+          }
+          else {
+            tag.drawGrid = false;
+          }
+          tag.update();
+          createDataTable('#client-table');
+        });
+      }
+    });
+
+    this.on('before-mount', function() {
+    });
+
+    onSelectItem(client) {
+      opts.navigate(client);
+    }
+
+    const loadTestClients = () => {
+      client = getTestClients();
+      sessionObj.clients.clientlist = client;
+      saveSession();
+
+      if (sessionObj.clients.clientlist != null && sessionObj.clients.clientlist.length > 0) {
+        tag.drawGrid = true;
+      }
+      else {
+        tag.drawGrid = false;
+      }
+      tag.update();
+      createDataTable('#client-table');
+    };
+
+  </script>
+</clients-list>

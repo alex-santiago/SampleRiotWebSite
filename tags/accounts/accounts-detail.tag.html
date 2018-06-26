@@ -1,0 +1,273 @@
+<accounts-detail>
+  <div class="page-header">
+     <h3><i class="fa fa-user"></i> { language.client.title.clientsAccountDetails }: {account.name}</h3>
+  </div>
+  <div class="page-toolbar">
+    <div class="col-auto">
+      <button type="button" class="btn btn-primary" onclick={onClickBack}><i class="fa fa-arrow-left"></i> { language.globals.back }</button>
+    </div>
+    <div class="col-10">
+      <div class="form-group-toolbar">
+        <button type="button" class="btn btn-primary" onclick={onClickNew}><i class="fa fa-file"></i> { language.globals.new }</button>
+        <button type="button" class="btn btn-primary" onclick={onClickSave}><i class="fa fa-save"></i> { language.globals.save }</button>
+      </div>
+    </div>
+  </div>
+
+  <form action="" id="form-content" role="form" class="custom-validation">
+    <div class="row">
+      <div class="col-sm-3 col-md-3 col-lg-3">
+        <div class="form-group">
+          <label>{ language.client.attributes.account.id }:</label>
+          <input class="form-control" type="text" readonly required id="inputaccountid" name="inputaccountid" ref="inputaccountid" value={ (account.id ? account.id : "") } placeholder={ language.client.placeholders.account.id }>
+        </div>
+      </div>
+      <div class="col-sm-9 col-md-9 col-lg-9">
+        <div class="form-group">
+          <label>{ language.client.attributes.account.name }:</label>
+          <input class="form-control" type="text" required id="inputaccountname" name="inputaccountname" ref="inputaccountname" value={ (account.name ? account.name : "") } placeholder={ language.client.placeholders.account.name }>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-6 col-lg-6">
+        <div class="form-group">
+          <label>{ language.client.attributes.account.email }:</label>
+          <input class="form-control" type="email" readonly required id="inputaccountemail" name="inputaccountemail" ref="inputaccountemail" value={ (account.email ? account.email : "") } placeholder={ language.client.placeholders.account.email }>
+        </div>
+      </div>
+      <div class="col-sm-4 col-md-3 col-lg-3">
+        <div class="form-group">
+          <label>{ language.client.attributes.account.disabled }:</label>
+          <!-- <input class="form-control" readonly type="text" id="inputDisabled" name="inputDisabled" ref="inputDisabled" value={ (account.disabled ? account.disabled : false) }> -->
+          <label class="label-switch switch-warning">
+            <input type="checkbox" class="switch-square switch-bootstrap" id="inputDisabled" name="inputDisabled" ref="inputDisabled" checked={ (account.disabled ? account.disabled : false) } >
+            <span class="lable"></span>
+          </label>
+        </div>
+      </div>
+      <div class="col-sm-4 col-md-3 col-lg-3">
+        <div class="form-group">
+          <label>{ language.client.attributes.account.blocked }:</label>
+          <input class="form-control" readonly type="text" id="inputBlocked" name="inputBlocked" ref="inputBlocked" value={ (account.blocked ? account.blocked : false) }>
+        </div>
+      </div>
+      <div class="col-sm-4 col-md-6 col-lg-6">
+        <div class="form-group">
+          <label>{ language.client.attributes.account.preference.countryId }:</label>
+          <select class="form-control" required name="selectcountries" id="selectcountries" ref="selectcountries" >
+              <option each={country in this.countries} value="{country.id}" selected={isSelectedCoutry(country.id, account)}>{country.name}</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-sm-4 col-md-6 col-lg-6">
+        <div class="form-group">
+          <label>{ language.client.attributes.account.preference.languageId }:</label>
+          <select class="form-control" required name="selectlanguages" id="selectlanguages" ref="selectlanguages" >
+              <option each={language in this.languages} value="{language.id}" selected={isSelectedLanguage(language.id, account)}>{language.name}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="col-sm-12 col-md-12 col-lg-12">
+        <div class="card mb-3">
+          <div class="card-header"><i class="fa fa-database"></i> { language.client.subtitle.accountSystems }:</div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-sm-12 col-md-12 col-lg-12">
+                <table class="table-sm table-bordered table-striped" id="systems-table" width="100%" cellspacing="0">
+                  <tbody>
+                    <tr each={system, index in sessionObj.clients.clientSystems} >
+                      <td>
+                        <label class="label-switch switch-warning">
+                          <input type="checkbox" class="switch-square switch-bootstrap" id="inputCanAccess{index}" name="inputCanAccess{index}" ref="inputCanAccess{index}" data-id={system.id} checked={ hasAccess(system.id, account) } onchange="{ toggleItem.bind() }">
+                          <span class="lable">{ system.id } - { system.name }</span>
+                        </label>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </form>
+
+  <!-- component javascript code -->
+  <script>
+    const tag = this;
+    loadSession();
+    tag.account = sessionObj.accounts.selectedAccount;
+
+    this.on('mount', function() {
+      nativeFormValidationOff();
+      if (IS_A_TEST) {
+        if (tag.account.new) {
+          tag.refs.inputaccountemail.removeAttribute('readonly');
+        }
+        loadTestCountries();
+        loadTestLanguages();
+        loadTestAccountSystems();
+        tag.update();
+      }
+      else {
+        if (tag.account.new) {
+          tag.refs.inputaccountemail.removeAttribute('readonly');
+        }
+        system.controllers.countries.listCoutry(onSuccessListCoutry);
+
+        system.controllers.languages.listLanguage(onSuccessListLanguage);
+
+        system.controllers.systems.listClientSystems(sessionObj.clients.selectedClient.id, onSuccessListClientSystems);
+
+      }
+    });
+
+    this.on('before-mount', function() {
+    });
+
+    function onSuccessListCoutry(countries) {
+      tag.countries = countries;
+    }
+
+    function onSuccessListLanguage(languages) {
+      tag.languages = languages;
+    }
+
+    function onSuccessListClientSystems(systems) {
+      sessionObj.clients.clientSystems = systems;
+      saveSession();
+      tag.update();
+    }
+
+    hasAccess(currentId, account) {
+      let hasId = ( tag.account.systemsIds ? tag.account.systemsIds.includes(parseInt(currentId, 10)) : false);
+      return (hasId);
+    }
+
+    toggleItem (e) {
+      let id = parseInt(e.item.system.id, 10);
+      if (tag.account.systemsIds.includes(id)) {
+        tag.account.systemsIds.splice(tag.account.systemsIds.indexOf(id), 1);
+      }
+      else {
+        tag.account.systemsIds.push(id);
+      }
+    }
+
+    isSelectedCoutry(currentId, account) {
+      let countryId = (account.preference ? (account.preference.countryId ? account.preference.countryId : "") : "");
+      // console.log('account');
+      // console.log(account);
+      // console.log('countryId');
+      // console.log(countryId);
+      // console.log('currentId');
+      // console.log(currentId);
+      return (countryId == currentId);
+    }
+
+    isSelectedLanguage(currentId, account) {
+      let languageId = (account.preference ? (account.preference.languageId ? account.preference.languageId : "") : "");
+      // console.log('account');
+      // console.log(account);
+      // console.log('languageId');
+      // console.log(languageId);
+      // console.log('currentId');
+      // console.log(currentId);
+      return (languageId == currentId);
+    }
+
+    onClickBack () {
+      sessionObj.accounts.selectedAccount = null;
+      saveSession();
+      path.navigate("/accounts-manage", path.parentDescription, language.client.title.accounts);
+    }
+
+    onClickNew () {
+      // initialize a new empty account and a new empty system in the sessionObj
+      sessionObj.accounts.selectedAccount = newAccount();
+      saveSession();
+      tag.refs.inputaccountid.value = '';
+      tag.refs.inputaccountname.value = '';
+      tag.refs.inputaccountemail.value = '';
+      tag.refs.inputaccountemail.removeAttribute('readonly');
+      tag.refs.inputDisabled.checked = false;
+      tag.refs.inputBlocked.value = false;
+      tag.refs.selectcountries.value = 0;
+      tag.refs.selectlanguages.value = 0;
+
+      tag.account.systemsIds = [];
+    }
+
+    onClickUserAccounts() {
+      path.navigate('/accounts-manage', path.parentDescription, language.client.title.accountsAccountManage);
+    }
+
+    onClickSave () {
+      if (formValidationPassed()) {
+        let account = new Object();
+        account.name = tag.refs.inputaccountname.value;
+        account.preference = new Object();
+        account.preference.countryId = tag.refs.selectcountries.value;
+        account.preference.languageId = tag.refs.selectlanguages.value;
+        account.systemsIds = tag.account.systemsIds.slice();
+
+        if (tag.refs.inputaccountid.value != '') {
+          let accountid = new Object();
+          accountid.clientId = sessionObj.clients.selectedClient.id;
+          accountid.id = tag.refs.inputaccountid.value;
+          account.disabled = tag.refs.inputDisabled.checked;
+          system.controllers.accounts.updateAccount(accountid, account, function() {
+            displayMessageSuccess(language.client.messages.accountAlteredSuccess);
+          });
+          account.id = tag.refs.inputaccountid.value;
+          account.email = tag.refs.inputaccountemail.value;
+          account.clientId = sessionObj.clients.selectedClient.id;
+          account.blocked = false;
+          sessionObj.accounts.selectedAccount = account;
+          // clear accounts list to search renew the search after updating or adding an account
+          sessionObj.accounts.accountlist = null;
+          saveSession();
+          tag.account = account;
+        }
+        else {
+          account.password = '';
+          account.email = tag.refs.inputaccountemail.value;
+          account.clientId = sessionObj.clients.selectedClient.id;
+          let accountid = new Object();
+          accountid.clientId = sessionObj.clients.selectedClient.id;
+          system.controllers.accounts.saveAccount(accountid, account, function(id) {
+            tag.refs.inputaccountid.value = id;
+            displayMessageSuccess(language.client.messages.accountInsertedSuccess);
+          });
+          account.id = tag.refs.inputaccountid.value;
+          account.blocked = false;
+          account.disabled = tag.refs.inputDisabled.checked;
+          sessionObj.systems.systemlist = new Object();
+          sessionObj.accounts.selectedAccount = account;
+          // clear accounts list to search renew the search after updating or adding an account
+          sessionObj.accounts.accountlist = null;
+          saveSession();
+          tag.account = account;
+          tag.update();
+        }
+        console.log('Final Account');
+        console.log(account);
+      }
+    }
+
+    const loadTestCountries = () => {
+      tag.countries = getTestCountries();
+    };
+
+    const loadTestLanguages = () => {
+      tag.languages = getTestLanguages();
+    };
+
+    const loadTestAccountSystems = () => {
+      tag.systems = getTestSystems(tag.account.id);
+    };
+
+  </script>
+</accounts-detail>

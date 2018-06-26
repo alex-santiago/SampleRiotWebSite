@@ -1,0 +1,43 @@
+<clients-manage>
+  <div class="page-header">
+     <h3><i class="fa fa-table"></i> { language.client.title.clientsManage }</h3>
+  </div>
+  <div class="page-toolbar">
+    <div class="col-auto form-group-toolbar">
+      <button type="button" class="btn btn-primary" onclick={onClickNew}><i class="fa fa-file"></i> { language.globals.new }</button>
+    </div>
+  </div>
+  <clients-list
+    navigate={onClickNavigate}
+  ></clients-list>
+
+  <!-- component javascript code -->
+  <script>
+
+    const tag = this;
+    tag.drawGrid = false;
+
+    this.on('mount', function() {
+    });
+
+    this.on('before-mount', function() {
+    });
+
+    onClickNew() {
+      sessionObj.clients.selectedClient = newClient();
+      sessionObj.systems.systemlist = new Object();
+      saveSession();
+      path.navigate('/clients-detail', path.parentDescription, language.client.title.clientsDetail);
+    }
+
+    onClickNavigate(selectedClient) {
+      sessionObj.clients.selectedClient = selectedClient;
+      sessionObj.systems.systemlist = new Object();
+      sessionObj.accounts.accountlist = null;
+      sessionObj.accounts.pages = null;
+      saveSession();
+      path.navigate('/clients-detail', path.parentDescription, language.client.title.clientsDetail);
+    }
+
+  </script>
+</clients-manage>

@@ -1,0 +1,82 @@
+<eulas-edit>
+  <div class="page-toolbar">
+    <div class="col-auto">
+      <button type="button" class="btn btn-primary" onclick={onClickBack}><i class="fa fa-arrow-left"></i> { language.globals.back }</button>
+    </div>
+    <div class="col-10">
+      <div class="form-group-toolbar">
+        <button type="button" class="btn btn-primary" onclick={onClickNew}><i class="fa fa-file"></i> { language.globals.new }</button>
+        <button type="button" class="btn btn-primary" onclick={onClickSave}><i class="fa fa-save"></i> { language.globals.save }</button>
+      </div>
+    </div>
+  </div>
+  <form action="" id="form-content" role="form" class="custom-validation">
+    <div class="row">
+      <div class="col-sm-6 col-md-4 col-lg-4" if={visible} >
+        <div class="form-group">
+          <label>{ language.eula.attributes.id }:</label>
+          <input class="form-control" readonly required type="text" id="inputeulaid" name="inputeulaid" ref="inputeulaid" value={ (eula.id ? eula.id : "") } placeholder="EULA ID">
+        </div>
+      </div>
+      <div class="col-sm-12 col-md-12 col-lg-12" >
+        <div class="form-group">
+          <label>{ language.eula.attributes.text }:</label>
+          <textarea class="form-control eula" type="text" required id="textareaeulatext" name="textareaeulatext" ref="textareaeulatext" value={ (eula.text ? eula.text : "") } >
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <!-- component javascript code -->
+  <script>
+
+    const tag = this;
+    tag.visible = true;
+    loadSession();
+    tag.eula = sessionObj.eulas.selectedEula;
+    tag.visible = !(tag.eula.new == true);
+
+    this.on('mount', function() {
+      nativeFormValidationOff();
+    });
+
+    this.on('before-mount', function() {
+    });
+
+    onClickBack () {
+      path.navigate("/eulas-manage", path.parentDescription, language.eula.title.eulasManage);
+    }
+
+    onClickNew () {
+      tag.visible = false;
+      tag.refs.textareaeulatext.value = '';
+    }
+
+    onClickSave () {
+      if (formValidationPassed()) {
+        let eula = new Object();
+        eula.text = tag.refs.textareaeulatext.value;
+        if (tag.refs.inputeulaid) {
+          let eulaid = new Object();
+          eulaid.id = tag.refs.inputeulaid.value;
+          eula.id = tag.refs.inputeulaid.value;
+          system.controllers.eulas.updateEULA(eulaid, eula, function() {
+            tag.visible = true;
+            displayMessageSuccess(language.eula.messages.eulaAlteredSuccess);
+          });
+        }
+        else {
+          eula.id = 0;
+          system.controllers.eulas.saveEULA(eula, function(eula) {
+            sessionObj.eulas.selectedEula = eula;
+            saveSession();
+            tag.eula = eula;
+            tag.visible = true;
+            displayMessageSuccess(language.eula.messages.eulaInsertedSuccess);
+          });
+        }
+      }
+    }
+
+  </script>
+</eulas-edit>

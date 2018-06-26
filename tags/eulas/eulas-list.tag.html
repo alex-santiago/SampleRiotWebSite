@@ -1,0 +1,75 @@
+<eulas-list>
+  <div class="table-responsive" if={drawGrid}>
+    <table class="dataTable table table-bordered table-striped" id="eulas-table" width="100%" cellspacing="0">
+      <thead>
+        <tr>
+          <th>{ language.eula.attributes.id }</th>
+          <th>{ language.eula.attributes.description }</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr each={eula in sessionObj.eulas.eulaslist} onclick={()=>onSelectItem(eula)}>
+          <td>{ eula.id }</td>
+          <td>{ formatContent(eula.text, 300) }</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- component javascript code -->
+  <script>
+    const tag = this;
+    tag.drawGrid = false;
+
+    this.on('mount', function() {
+      if (IS_A_TEST) {
+        loadTestEulas();
+      }
+      else {
+        system.controllers.eulas.listEulas(function(eulas) {
+          sessionObj.eulas.eulaslist = eulas;
+          saveSession();
+          if (sessionObj.eulas.eulaslist != null && sessionObj.eulas.eulaslist.length > 0) {
+            tag.drawGrid = true;
+          }
+          else {
+            tag.drawGrid = false;
+          }
+          tag.update();
+          createDataTable('#eulas-table');
+        });
+      }
+    });
+
+    this.on('before-mount', function() {
+    });
+
+    formatContent (text, maxSize) {
+      return formatLargeString(text, maxSize);
+    }
+
+    onSelectItem(eula) {
+      navigate(eula);
+    }
+
+    const navigate = (eula) => {
+      sessionObj.eulas.selectedEula = eula;
+      saveSession();
+      path.navigate('/eulas-edit', path.parentDescription, language.eula.title.eulasEdit);
+    };
+
+    const loadTestEulas = () => {
+      sessionObj.eulas.eulaslist = getTestEulas();
+      saveSession();
+      if (sessionObj.eulas.eulaslist != null && sessionObj.eulas.eulaslist.length > 0) {
+        tag.drawGrid = true;
+      }
+      else {
+        tag.drawGrid = false;
+      }
+      tag.update();
+      createDataTable('#eulas-table');
+    };
+
+  </script>
+</eulas-list>

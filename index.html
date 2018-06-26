@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="All2Sys Solutions Template">
+  <meta name="author" content="All2Sys Solutions">
+  <title>Sample Riot WebSite</title>
+  <!-- Bootstrap 4.0.0 core CSS-->
+  <link href="plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <!-- DataTables Bootstrap 4 CSS-->
+  <link href="plugins/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+  <!-- Custom fonts for this template-->
+  <link href="plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <!-- morris chart plugin CS v0.5.1-->
+  <link href="plugins/morris.js/0.5.1/morris.css">
+  <!-- Styles for the framework-->
+  <link href="css/styles.css" rel="stylesheet">
+  <!-- Custom Styles for the framework-->
+  <link href="css/custom.css" rel="stylesheet">
+  <link rel="shortcut icon" href="images/favicon.ico" type="image/ico">
+</head>
+
+<body class="fixed-nav sticky-footer bg-dark" id="page-top">
+  <!-- Bootstrap core JavaScript-->
+  <script src="plugins/jquery/jquery.min.js"></script>
+  <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- Core plugin JavaScript-->
+  <script src="plugins/jquery-easing/jquery.easing.min.js"></script>
+  <!-- Page level plugin JavaScript-->
+  <script src="plugins/chart.js/Chart.min.js"></script>
+  <script src="plugins/datatables/jquery.dataTables.js"></script>
+  <script src="plugins/datatables/dataTables.bootstrap4.js"></script>
+  <!-- Custom scripts for all pages-->
+  <!-- <script src="js/sb-admin.min.js"></script> -->
+  <script src="js/sb-admin.js"></script>
+  <!-- Custom scripts for this page-->
+  <script src="js/sb-admin-datatables.min.js"></script>
+  <!-- <script src="js/sb-admin-charts.min.js"></script> -->
+  <!-- raphael dependency for morris chart plugin v0.5.1-->
+  <script src="plugins/raphael.js/2.2.1/raphael.min.js"></script>
+  <!-- morris chart plugin v0.5.1-->
+  <script src="plugins/morris.js/0.5.1/morris.min.js"></script>
+
+  <!-- language pack scripts -->
+  <script src="js/framework/language/dictionary.pt.br.js"></script>
+  <script src="js/framework/language/language.pt.br.js"></script>
+  <script src="js/framework/language/language.en.us.js"></script>
+  <script src="js/framework/language/language.es.es.js"></script>
+  <!-- application plugins scripts -->
+  <!-- spinner js 2.3.2 -->
+  <script src="plugins/spinjs/2.3.2/spin.min.js"></script>
+
+  <!-- moment.js plugin version 2.20.1 -->
+  <script src="plugins/moment/2.20.1/moment.js"></script>
+
+  <!-- riot.js plugin -->
+  <script src="plugins/riot/route.min.js"></script>
+  <script src="plugins/riot/riot_compiler.min.js"></script>
+
+  <!-- framework scripts initialization -->
+  <script src="js/framework/globals.js"></script>
+  <script src="js/framework/formvalidation.js"></script>
+  <script src="js/framework/menu.js"></script>
+  <script src="js/framework/app.js"></script>
+  <script src="js/framework/ajax.js"></script>
+  <script src="js/framework/session.js"></script>
+  <script src="js/framework/breadcrumb.js"></script>
+  <script src="js/framework/messages.js"></script>
+  <script src="js/framework/charts.js"></script>
+  <script src="js/framework/pagination.js"></script>
+  <script src="js/framework/modal.js"></script>
+
+  <!-- framework scripts configuration -->
+  <script src="js/framework/configuration/test-variables.js"></script>
+  <script src="js/framework/configuration/session-config.js"></script>
+  <script src="js/framework/configuration/language-config.js"></script>
+  <script src="js/framework/configuration/controllers.js"></script>
+  <script src="js/framework/configuration/menu-items.js"></script>
+  <script src="js/framework/configuration/host.js"></script>
+  <script src="js/framework/configuration/routes.js"></script>
+  <script src="js/framework/configuration/tables.js"></script>
+
+  <!-- riot.js component specific -->
+  <script src="js/entity/account.js"></script>
+  <script src="js/entity/client.js"></script>
+  <script src="js/entity/country.js"></script>
+  <script src="js/entity/eula.js"></script>
+  <script src="js/entity/language.js"></script>
+  <script src="js/entity/system.js"></script>
+
+  <!-- riot.js component initialization -->
+  <wrapper id="wrapper"></wrapper>
+
+  <!-- wireframe components -->
+  <script src="./tags/wire-frame/wrapper.tag.html" type="riot/tag"></script>
+  <script src="./tags/wire-frame/site-header.tag.html" type="riot/tag"></script>
+  <script src="./tags/wire-frame/toggle-site-navigation.tag.html" type="riot/tag"></script>
+  <script src="./tags/wire-frame/site-messages.tag.html" type="riot/tag"></script>
+  <script src="./tags/wire-frame/site-alerts.tag.html" type="riot/tag"></script>
+  <script src="./tags/wire-frame/site-search.tag.html" type="riot/tag"></script>
+  <script src="./tags/wire-frame/site-logout-button.tag.html" type="riot/tag"></script>
+  <script src="./tags/wire-frame/main-content.tag.html" type="riot/tag"></script>
+  <script src="./tags/wire-frame/logout-modal.tag.html" type="riot/tag"></script>
+  <script src="./tags/wire-frame/bread-crumb.tag.html" type="riot/tag"></script>
+  <script src="./tags/wire-frame/content-body.tag.html" type="riot/tag"></script>
+  <script src="./tags/wire-frame/site-footer.tag.html" type="riot/tag"></script>
+  <script src="./tags/wire-frame/site-navigation.tag.html" type="riot/tag"></script>
+  <script src="./tags/wire-frame/site-error.tag.html" type="riot/tag"></script>
+  <script src="./tags/wire-frame/components/modal.tag.html" type="riot/tag"></script>
+
+  <!-- tags components -->
+  <script src="./tags/clients/clients-manage.tag.html" type="riot/tag"></script>
+  <script src="./tags/clients/clients-list.tag.html" type="riot/tag"></script>
+  <script src="./tags/clients/clients-detail.tag.html" type="riot/tag"></script>
+  <script src="./tags/clients/clients-system.tag.html" type="riot/tag"></script>
+
+  <script src="./tags/accounts/accounts-manage.tag.html" type="riot/tag"></script>
+  <script src="./tags/accounts/accounts-filter.tag.html" type="riot/tag"></script>
+  <script src="./tags/accounts/accounts-list.tag.html" type="riot/tag"></script>
+  <script src="./tags/accounts/accounts-detail.tag.html" type="riot/tag"></script>
+
+  <script src="./tags/eulas/eulas-manage.tag.html" type="riot/tag"></script>
+  <script src="./tags/eulas/eulas-list.tag.html" type="riot/tag"></script>
+  <script src="./tags/eulas/eulas-edit.tag.html" type="riot/tag"></script>
+
+  <!-- script compiler riot.js -->
+  <script>
+    app.init();
+
+    var opts = {
+      lines: 12 // The number of lines to draw
+      , length: 20 // The length of each line
+      , width: 10 // The line thickness
+      , radius: 30 // The radius of the inner circle
+      , scale: 1 // Scales overall size of the spinner
+      , corners: 1 // Corner roundness (0..1)
+      , color: '#000' // #rgb or #rrggbb or array of colors
+      , opacity: 0.25 // Opacity of the lines
+      , rotate: 0 // The rotation offset
+      , direction: 1 // 1: clockwise, -1: counterclockwise
+      , speed: 1 // Rounds per second
+      , trail: 60 // Afterglow percentage
+      , fps: 20 // Frames per second when using setTimeout() as a fallback for CSS
+      , zIndex: 2e9 // The z-index (defaults to 2000000000)
+      , className: 'spinner' // The CSS class to assign to the spinner
+      , top: '50%' // Top position relative to parent
+      , left: '50%' // Left position relative to parent
+      , shadow: true // Whether to render a shadow
+      , hwaccel: false // Whether to use hardware acceleration
+      , position: 'absolute' // Element positioning
+    }
+
+    var spinnerTarget = document.getElementById('page-top')
+    var spinner = new Spinner(opts);
+  </script>
+</body>
+
+</html>

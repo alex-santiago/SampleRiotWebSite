@@ -1,0 +1,13 @@
+div.page-toolbar {
+  margin: 0.5rem -15px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.form-group-toolbar .btn-primary {
+  color: $red-bright;
+}
+
+.form-group-toolbar .btn-primary:hover {
+  color: $red-bright;
+}

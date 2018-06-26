@@ -1,0 +1,49 @@
+<accounts-filter>
+  <form id="search-form" role="form" class="custom-validation">
+    <div class="row mb-3 mt-3">
+      <div class="col-sm-6 col-md-6 col-lg-6">
+        <div class="form-group">
+          <label>{ language.client.attributes.account.name }:</label>
+          <input class="form-control" placeholder={ language.client.placeholders.account.name } type="text" id="inputAccountName" ref="inputAccountName">
+        </div>
+      </div>
+      <div class="col-lg-12">
+        <div class="form-group">
+          <button class="btn btn-primary" onclick={onButtonSearchClick}>
+            <i class="fa fa-search"></i> { language.globals.search }</button>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <!-- component javascript code -->
+  <script>
+
+    const tag = this;
+    tag.drawGrid = false;
+
+    this.on('mount', function () {
+      tag.refs.inputAccountName.value = "";
+
+      // Remove browsers default Form validation
+      nativeFormValidationOff();
+    });
+
+    this.on('before-mount', function () {
+    });
+
+    // Evento Search button
+    onButtonSearchClick(e){
+      let queryParams = new Object();
+      queryParams.clientId = sessionObj.clients.selectedClient.id;
+      queryParams.name = tag.refs.inputAccountName.value
+      queryParams.page = 1;
+
+      // Call the form validation and passes a custom function to validate other fields
+      if (formValidationPassed()) {
+        opts.onclicksearch(queryParams);
+      }
+    }
+
+  </script>
+</accounts-filter>

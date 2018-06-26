@@ -1,0 +1,238 @@
+<clients-system>
+  <div class="page-header">
+     <h3><i class="fa fa-database"></i> { language.client.title.clientsSystem }:</h3>
+  </div>
+  <div class="page-toolbar">
+    <div class="col-auto">
+      <button type="button" class="btn btn-primary" onclick={onClickNavigate}><i class="fa fa-arrow-left"></i> { language.globals.back }</button>
+    </div>
+    <div class="col-10">
+      <div class="form-group-toolbar">
+        <button type="button" class="btn btn-primary" onclick={onClickSave}><i class="fa fa-file"></i> { language.globals.save }</button>
+      </div>
+    </div>
+  </div>
+  <form id="form-system" action="" role="form-system" class="custom-validation">
+    <div class="row">
+      <div class="col-sm-12 col-md-4 col-lg-4" if={visible}>
+        <div class="form-group">
+          <label>{ language.client.attributes.system.id }:</label>
+          <input type="text" readonly required id="inputSystemId" name="inputSystemId" ref="inputSystemId" value={ (system.id ? system.id : "") } class="form-control" placeholder={ language.client.placeholders.system.id }>
+        </div>
+      </div>
+      <div class="col-sm-12 col-md-8 col-lg-8">
+        <div class="form-group">
+          <label>{ language.client.attributes.system.name }:</label>
+          <input type="text" required id="inputSystemName" name="inputSystemName" ref="inputSystemName" value={ (system.name ? system.name : "") } class="form-control" placeholder={ language.client.placeholders.system.name }>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-4 col-lg-4">
+        <div class="form-group">
+          <label>{ language.client.attributes.system.code }:</label>
+          <input class="form-control" readonly type="text" id="inputSystemCode" name="inputSystemCode" ref="inputSystemCode" value={ (system.code ? system.code : "") }>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-4 col-lg-4">
+        <div class="form-group">
+          <label>{ language.client.attributes.system.hasValidEula }:</label>
+          <input class="form-control" readonly type="text" id="inputHasValidEula" name="inputHasValidEula" ref="inputHasValidEula" value={ (system.hasValidEula ? system.hasValidEula : false) }>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-12 col-lg-12">
+        <div class="form-group">
+          <label>{ language.client.attributes.system.url }:</label>
+          <input type="text" required id="inputSystemUrl" name="inputSystemUrl" ref="inputSystemUrl" value={ (system.url ? system.url : "") } class="form-control" placeholder={ language.client.placeholders.system.url }>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-12 col-md-12 col-lg-12 pb-3">
+        <div class="card">
+          <div class="card-header"><i class="fa fa-database"></i> { language.client.subtitle.configuration }:</div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-sm-4 col-md-6 col-lg-6">
+                <div class="form-group">
+                  <label>{ language.client.attributes.system.countryId }</label>
+                  <select class="form-control" required name="selectcountries" id="selectcountries" ref="selectcountries" >
+                      <option each={country in this.countries} value="{country.id}" selected={isSelected(country.id, system)}>{country.name}</option>
+                  </select>
+                  <!-- <input type="text" required id="inputCountryId" name="inputCountryId" ref="inputCountryId" value={ (system.systemConfiguration ? ( system.systemConfiguration.countryId ? system.systemConfiguration.countryId : "" ) : "") } class="form-control" placeholder="Código do Id do País do Sistema"> -->
+                </div>
+              </div>
+              <div class="col-sm-4 col-md-6 col-lg-6">
+                <div class="form-group">
+                  <label>{ language.client.attributes.system.legacyConfigurationId }:</label>
+                  <input type="text" required id="inputLegacyConfigurationId" name="inputLegacyConfigurationId" ref="inputLegacyConfigurationId" value={ (system.systemConfiguration ? ( system.systemConfiguration.legacyConfigurationId ? system.systemConfiguration.legacyConfigurationId : "" ) : "") } class="form-control" placeholder={ language.client.placeholders.system.legacyConfigurationId }>
+                </div>
+              </div>
+              <div class="col-sm-4 col-md-6 col-lg-6">
+                <div class="form-group">
+                  <label>{ language.client.attributes.system.returnImperialUnitData }:</label>
+                  <label class="label-switch switch-warning">
+                    <input type="checkbox" class="switch-square switch-bootstrap" id="inputReturnImperialUnitData" name="inputReturnImperialUnitData" ref="inputReturnImperialUnitData" checked={ (system.systemConfiguration ? ( system.systemConfiguration.returnImperialUnitData ? true : false ) : false) } >
+                    <span class="lable"></span>
+                  </label>
+                </div>
+              </div>
+              <div class="col-sm-4 col-md-6 col-lg-6">
+                <div class="form-group">
+                  <label>{ language.client.attributes.system.returnProductStandards }:</label>
+                  <label class="label-switch switch-warning">
+                    <input type="checkbox" class="switch-square switch-bootstrap" id="inputReturnProductStandards" name="inputReturnProductStandards" ref="inputReturnProductStandards" checked={ (system.systemConfiguration ? ( system.systemConfiguration.returnProductStandards ? true : false ) : false) } >
+                    <span class="lable"></span>
+                  </label>
+                </div>
+              </div>
+              <div class="col-sm-4 col-md-6 col-lg-6">
+                <div class="form-group">
+                  <label>{ language.client.attributes.system.returnImages }:</label>
+                  <label class="label-switch switch-warning">
+                    <input type="checkbox" class="switch-square switch-bootstrap" id="inputReturnImages" name="inputReturnImages" ref="inputReturnImages" checked={ (system.systemConfiguration ? ( system.systemConfiguration.returnImages ? true : false ) : false) } >
+                    <span class="lable"></span>
+                  </label>
+                </div>
+              </div>
+              <div class="col-sm-4 col-md-6 col-lg-6">
+                <div class="form-group">
+                  <label>{ language.client.attributes.system.usesFixedIP }:</label>
+                  <input class="form-control" readonly type="text" id="inputUsesFixedIP" name="inputUsesFixedIP" ref="inputUsesFixedIP" value={ (system.systemConfiguration ? ( system.systemConfiguration.usesFixedIP ? true : false ) : false) }>
+                </div>
+              </div>
+              <div class="col-sm-4 col-md-6 col-lg-6">
+                <div class="form-group">
+                  <label>{ language.client.attributes.system.remoteHostIP }:</label>
+                  <input type="text" id="inputRemoteHostIP" name="inputRemoteHostIP" ref="inputRemoteHostIP" value={ (system.systemConfiguration ? ( system.systemConfiguration.remoteHostIP ? system.systemConfiguration.remoteHostIP : "" ) : "") } class="form-control" placeholder={ language.client.placeholders.system.remoteHostIP }>
+                </div>
+              </div>
+              <div class="col-sm-4 col-md-6 col-lg-6">
+                <div class="form-group">
+                  <label>{ language.client.attributes.system.useAlternativeViscosity }:</label>
+                  <label class="label-switch switch-warning">
+                    <input type="checkbox" class="switch-square switch-bootstrap" id="inputUseAlternativeViscosity" name="inputUseAlternativeViscosity" ref="inputUseAlternativeViscosity" checked={ (system.systemConfiguration ? ( system.systemConfiguration.useAlternativeViscosity ? true : false ) : false) } >
+                    <span class="lable"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12 col-md-12 col-lg-12">
+        <div class="card">
+          <div class="card-header"><i class="fa fa-image"></i> { language.client.subtitle.styleConfiguration }:</div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-sm-4 col-md-6 col-lg-6">
+                <div class="form-group">
+                  <label>{ language.client.attributes.image }:</label>
+                  <input type="text" id="inputImage" name="inputImage" ref="inputImage" value={ (system.style ? ( system.style.image ? system.style.image : "" ) : "") } class="form-control" placeholder={ language.client.placeholders.styleImage }>
+                </div>
+              </div>
+              <div class="col-sm-4 col-md-6 col-lg-6">
+                <div class="form-group">
+                  <label>{ language.client.attributes.icon }:</label>
+                  <input type="text" id="inputIcon" name="inputIcon" ref="inputIcon" value={ (system.style ? ( system.style.icon ? system.style.icon : "" ) : "") } class="form-control" placeholder={ language.client.placeholders.styleIcon }>
+                </div>
+              </div>
+              <div class="col-sm-4 col-md-6 col-lg-6">
+                <div class="form-group">
+                  <label>{ language.client.attributes.custom }:</label>
+                  <input type="text" id="inputCustom" name="inputCustom" ref="inputCustom" value={ (system.style ? ( system.style.custom ? system.style.custom : "" ) : "") } class="form-control" placeholder={ language.client.placeholders.styleCustom }>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <!-- component javascript code -->
+  <script>
+    const tag = this;
+    tag.visible = true;
+    loadSession();
+    tag.client = sessionObj.clients.selectedClient;
+    tag.system = sessionObj.systems.selectedSystem;
+    if (tag.system.new){
+      tag.visible = false;
+    }
+
+    this.on('mount', function() {
+      nativeFormValidationOff();
+
+      if (IS_A_TEST) {
+        loadTestCountries();
+      }
+      else {
+        system.controllers.countries.listCoutry(function(countries) {
+          tag.countries = countries;
+          tag.update();
+        });
+      }
+    });
+
+    this.on('before-mount', function() {
+    });
+
+    isSelected(currentId, system) {
+      let countryId = (system.systemConfiguration ? ( system.systemConfiguration.countryId ? system.systemConfiguration.countryId : "" ) : "");
+      return (countryId == currentId);
+    }
+
+    onClickNavigate () {
+      sessionObj.systems.selectedSystem = null;
+      saveSession();
+      path.navigate("/clients-detail", path.parentDescription, language.client.title.clientsDetail);
+    }
+
+    onClickSave () {
+      if (formValidationPassed()) {
+        let system = new Object();
+        system.name = tag.refs.inputSystemName.value;
+        system.url = tag.refs.inputSystemUrl.value;
+        system.systemConfiguration = new Object();
+        system.systemConfiguration.countryId = tag.refs.selectcountries.value;
+        system.systemConfiguration.legacyConfigurationId = tag.refs.inputLegacyConfigurationId.value;
+        system.systemConfiguration.returnImperialUnitData = tag.refs.inputReturnImperialUnitData.checked;
+        system.systemConfiguration.returnProductStandards = tag.refs.inputReturnProductStandards.checked;
+        system.systemConfiguration.returnImages = tag.refs.inputReturnImages.checked;
+        system.systemConfiguration.remoteHostIP = tag.refs.inputRemoteHostIP.value;
+        system.systemConfiguration.useAlternativeViscosity = tag.refs.inputUseAlternativeViscosity.checked;
+        system.style = new Object();
+        system.style.image = tag.refs.inputImage.value;
+        system.style.icon = tag.refs.inputIcon.value;
+        system.style.custom = tag.refs.inputCustom.value;
+        if (tag.refs.inputSystemId) {
+          let systemid = new Object();
+          systemid.clientId = sessionObj.clients.selectedClient.id;
+          systemid.id = tag.refs.inputSystemId.value;
+          system.controllers.clients.updateSystem(systemid, system, function() {
+            tag.visible = true;
+            displayMessageSuccess(language.client.messages.systemAlteredSuccess);
+          });
+        }
+        else {
+          let clientid = new Object();
+          clientid.clientId = sessionObj.clients.selectedClient.id;
+          system.controllers.clients.saveSystem(clientid, system, function(system) {
+            sessionObj.systems.selectedSystem = system;
+            saveSession();
+            tag.visible = true;
+            displayMessageSuccess(language.client.messages.systemInsertedSuccess);
+          });
+        }
+      }
+    }
+
+    const loadTestCountries = () => {
+      tag.countries = getTestCountries();
+      tag.update();
+    };
+
+  </script>
+</clients-system>

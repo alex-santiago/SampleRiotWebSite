@@ -1,0 +1,174 @@
+<accounts-list>
+  <accounts-filter
+    onclickSearch={onButtonSearchClick}
+  ></accounts-filter>
+  <div class="row">
+    <div class="col-lg-12 mb-3" if={drawGrid}>
+      <div class="table-responsive" if={drawGrid}>
+        <table class="dataTable table table-bordered table-striped" id="account-table" width="100%" cellspacing="0">
+          <thead>
+            <tr>
+              <th>{ language.client.attributes.account.id }</th>
+              <th>{ language.client.attributes.account.name }</th>
+              <th>{ language.client.attributes.account.email }</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr each={account in sessionObj.accounts.accountlist} onclick={()=>onSelectItem(account)}>
+              <td>{ account.id }</td>
+              <td>{ account.name }</td>
+              <td>{ account.email }</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="dataTables_wrapper">
+          <div class="col-sm-12 col-md-12 col-lg-12">
+            <div class="dataTables_paginate">
+              <ul class="pagination">
+                <li class="paginate-button page-item previous" id="linkBtnPrevious" ref="linkBtnPrevious">
+                  <a href="#" class="page-link" onclick={onClickPrevious}>{ language.globals.previous }</a>
+                </li>
+                <li class="paginate-button page-item next" id="linkBtnNext" ref="linkBtnNext">
+                  <a href="#" class="page-link" onclick={onClickNext}>{ language.globals.next }</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- component javascript code -->
+  <script>
+
+    const tag = this;
+    tag.drawGrid = false;
+
+    this.on('mount', function() {
+      if (sessionObj.accounts.accountlist != null && sessionObj.accounts.accountlist.length > 0) {
+        tag.drawGrid = true;
+        tag.update();
+        configurePagination();
+      }
+      else {
+        tag.drawGrid = false;
+        tag.update();
+      }
+      initDataTable();
+    });
+
+    this.on('before-mount', function() {
+    });
+
+    onClickPrevious(e) {
+      e.preventDefault();
+      loadSession();
+      let pages = sessionObj.accounts.pages
+      let queryParams = new Object();
+      queryParams.clientId = pages.params.clientId;
+      queryParams.name = pages.params.name;
+      if (pages.params.page > 1) {
+        queryParams.page = pages.params.page - 1;
+      }
+      else {
+        queryParams.page = 1;
+      }
+      system.controllers.accounts.pageAccounts(queryParams, onSuccess);
+      e.stopPropagation();
+    }
+
+    onClickNext(e) {
+      e.preventDefault();
+      loadSession();
+      let pages = sessionObj.accounts.pages
+      let queryParams = new Object();
+      queryParams.clientId = pages.params.clientId;
+      queryParams.name = pages.params.name;
+      queryParams.page = pages.params.page + 1;
+      system.controllers.accounts.pageAccounts(queryParams, onSuccess);
+      e.stopPropagation();
+    }
+
+    // Evento Search button
+    onButtonSearchClick(queryParams){
+      if (IS_A_TEST) {
+        loadTestAccounts();
+      }
+      else {
+        system.controllers.accounts.pageAccounts(queryParams, onSuccess);
+      }
+    }
+
+    function onSuccess(pages) {
+      sessionObj.accounts.accountlist = pages.page;
+      sessionObj.accounts.pages = pages;
+      saveSession();
+
+      if (sessionObj.accounts.accountlist != null && sessionObj.accounts.accountlist.length > 0) {
+        tag.drawGrid = true;
+        tag.update();
+        configurePagination();
+      }
+      else {
+        tag.drawGrid = false;
+        tag.update();
+      }
+      initDataTable();
+    }
+
+    function configurePagination() {
+      if (sessionObj.accounts.pages != null && typeof sessionObj.accounts.pages !== 'undefined') {
+        if (sessionObj.accounts.pages.previous) {
+          tag.refs.linkBtnPrevious.classList.remove('disabled');
+        }
+        else {
+          tag.refs.linkBtnPrevious.classList.add('disabled');
+        }
+        if (sessionObj.accounts.pages.next) {
+          tag.refs.linkBtnNext.classList.remove('disabled');
+        }
+        else {
+          tag.refs.linkBtnNext.classList.add('disabled');
+        }
+      }
+      else {
+        tag.refs.linkBtnPrevious.classList.add('disabled');
+        tag.refs.linkBtnPrevious.classList.add('disabled');
+      }
+    }
+
+    function initDataTable() {
+      tag.dataTable = createDataTable('#account-table', customizeDataTable);
+    }
+
+    const customizeDataTable = (tableName, tableConfig) => {
+      tableConfig.lengthChange = false;
+      tableConfig.searching = true;
+      tableConfig.paging = false;
+      tableConfig.ordering = true;
+      tableConfig.info = false;
+      return $(tableName).DataTable(tableConfig);
+    };
+
+    onSelectItem(account) {
+      opts.navigate(account);
+    }
+
+    const loadTestAccounts = () => {
+      account = getTestAccounts();
+      sessionObj.accounts.accountlist = account;
+      saveSession();
+
+      if (sessionObj.accounts.accountlist != null && sessionObj.accounts.accountlist.length > 0) {
+        tag.drawGrid = true;
+      }
+      else {
+        tag.drawGrid = false;
+      }
+      tag.update();
+      initDataTable();
+    };
+
+  </script>
+</accounts-list>
